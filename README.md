@@ -1,24 +1,24 @@
-# 🚀 DSA Tracker — Striver Sheet Progress Tracker
+# DSA Tracker — Striver Sheet Progress Tracker
 
 > A full-stack web application to help students track their **Data Structures & Algorithms** preparation using the **Striver DSA Sheet**. Built with **Next.js 16**, **PostgreSQL (Neon)**, and deployed on **Vercel**.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 **User Authentication** — Secure register/login with bcrypt-hashed passwords and HTTP-only session cookies
-- 📊 **Progress Dashboard** — Visual overview of your DSA journey with circular progress, streak tracking, and weekly heatmaps
-- 📋 **Topic-based DSA Sheet** — 450+ problems from the Striver A2Z sheet grouped by topics with a smooth drawer UI
-- 🗓️ **Personalized Preparation Plans** — Choose 2, 3, 4, or 6-month plans; get daily problem assignments based on your pace
-- 🧠 **Health Zone System** — Automatically detects if you're on track (Healthy ✅ / Warning ⚠️ / Danger 🔴) based on your progress vs. expected pace
-- 💡 **Job Readiness Score** — Calculates your interview readiness using weighted difficulty scores
-- 🏆 **Leaderboard** — See how your progress compares against other learners
-- 🌙 **Dark Mode** — Beautiful light/dark theme toggle powered by `next-themes`
-- 💾 **Persistent Database** — All data stored in a cloud-hosted **Neon PostgreSQL** database — no data loss on redeploy
+-  **User Authentication** — Secure register/login with bcrypt-hashed passwords and HTTP-only session cookies
+-  **Progress Dashboard** — Visual overview of your DSA journey with circular progress, streak tracking, and weekly heatmaps
+-  **Topic-based DSA Sheet** — 450+ problems from the Striver A2Z sheet grouped by topics with a smooth drawer UI
+-  **Personalized Preparation Plans** — Choose 2, 3, 4, or 6-month plans; get daily problem assignments based on your pace
+-  **Health Zone System** — Automatically detects if you're on track (Healthy ✅ / Warning ⚠️ / Danger 🔴) based on your progress vs. expected pace
+-  **Job Readiness Score** — Calculates your interview readiness using weighted difficulty scores
+-  **Leaderboard** — See how your progress compares against other learners
+-  **Dark Mode** — Beautiful light/dark theme toggle powered by `next-themes`
+-  **Persistent Database** — All data stored in a cloud-hosted **Neon PostgreSQL** database — no data loss on redeploy
 
 ---
 
-## 🖥️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -32,7 +32,7 @@
 
 ---
 
-## 🛠️ Getting Started (Local Development)
+##  Getting Started (Local Development)
 
 ### Prerequisites
 - Node.js 18+
@@ -86,7 +86,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🚀 Deploying to Vercel
+##  Deploying to Vercel
 
 1. Push your code to GitHub.
 2. Import the repository on [Vercel.com](https://vercel.com).
