@@ -10,7 +10,7 @@
 -  **Progress Dashboard** — Visual overview of your DSA journey with circular progress, streak tracking, and weekly heatmaps
 -  **Topic-based DSA Sheet** — 450+ problems from the Striver A2Z sheet grouped by topics with a smooth drawer UI
 -  **Personalized Preparation Plans** — Choose 2, 3, 4, or 6-month plans; get daily problem assignments based on your pace
--  **Health Zone System** — Automatically detects if you're on track (Healthy ✅ / Warning ⚠️ / Danger 🔴) based on your progress vs. expected pace
+-  **Health Zone System** — Automatically detects if you're on track (Healthy / Warning / Danger) based on your progress vs. expected pace
 -  **Job Readiness Score** — Calculates your interview readiness using weighted difficulty scores
 -  **Leaderboard** — See how your progress compares against other learners
 -  **Dark Mode** — Beautiful light/dark theme toggle powered by `next-themes`
