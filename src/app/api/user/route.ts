@@ -14,13 +14,8 @@ export async function GET() {
     const userId = cookieStore.get('dsa_user_id')?.value;
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const progress = db.prepare('SELECT * FROM user_progress WHERE user_id = ?').get(Number(userId)) as {
-      completed_problems: string;
-      streak: number;
-      last_active_date: string | null;
-      plan_duration_months: number | null;
-      start_date: string | null;
-    } | undefined;
+    const progressRes = await db.query('SELECT * FROM user_progress WHERE user_id = $1', [Number(userId)]);
+    const progress = progressRes.rows[0];
 
     if (!progress) return NextResponse.json({ error: 'Progress not found' }, { status: 404 });
 
@@ -45,23 +40,24 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    // Map camelCase to snake_case
+    // Map camelCase to snake_case with dynamic pg parameters
     const updates: string[] = [];
     const values: unknown[] = [];
+    let pIdx = 1;
 
     if (body.completedProblems !== undefined) {
-      updates.push('completed_problems = ?');
+      updates.push(`completed_problems = $${pIdx++}`);
       values.push(JSON.stringify(body.completedProblems));
     }
-    if (body.streak !== undefined) { updates.push('streak = ?'); values.push(body.streak); }
-    if (body.lastActiveDate !== undefined) { updates.push('last_active_date = ?'); values.push(body.lastActiveDate); }
-    if (body.planDurationMonths !== undefined) { updates.push('plan_duration_months = ?'); values.push(body.planDurationMonths); }
-    if (body.startDate !== undefined) { updates.push('start_date = ?'); values.push(body.startDate); }
-    updates.push("updated_at = datetime('now')");
+    if (body.streak !== undefined) { updates.push(`streak = $${pIdx++}`); values.push(body.streak); }
+    if (body.lastActiveDate !== undefined) { updates.push(`last_active_date = $${pIdx++}`); values.push(body.lastActiveDate); }
+    if (body.planDurationMonths !== undefined) { updates.push(`plan_duration_months = $${pIdx++}`); values.push(body.planDurationMonths); }
+    if (body.startDate !== undefined) { updates.push(`start_date = $${pIdx++}`); values.push(body.startDate); }
+    updates.push("updated_at = CURRENT_TIMESTAMP");
 
     if (updates.length > 1) {
       values.push(Number(userId));
-      db.prepare(`UPDATE user_progress SET ${updates.join(', ')} WHERE user_id = ?`).run(...values);
+      await db.query(`UPDATE user_progress SET ${updates.join(', ')} WHERE user_id = $${pIdx}`, values);
     }
 
     return GET();

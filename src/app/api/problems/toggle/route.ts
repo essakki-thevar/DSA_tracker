@@ -9,11 +9,8 @@ export async function POST(req: Request) {
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { problemId } = await req.json();
-    const row = db.prepare('SELECT completed_problems, streak, last_active_date FROM user_progress WHERE user_id = ?').get(Number(userId)) as {
-      completed_problems: string;
-      streak: number;
-      last_active_date: string | null;
-    };
+    const rowRes = await db.query('SELECT completed_problems, streak, last_active_date FROM user_progress WHERE user_id = $1', [Number(userId)]);
+    const row = rowRes.rows[0];
 
     const completed: string[] = JSON.parse(row?.completed_problems || '[]');
     const idx = completed.indexOf(problemId);
@@ -36,8 +33,10 @@ export async function POST(req: Request) {
       lastActive = today;
     }
 
-    db.prepare(`UPDATE user_progress SET completed_problems = ?, streak = ?, last_active_date = ?, updated_at = datetime('now') WHERE user_id = ?`)
-      .run(JSON.stringify(completed), streak, lastActive, Number(userId));
+    await db.query(
+      `UPDATE user_progress SET completed_problems = $1, streak = $2, last_active_date = $3, updated_at = CURRENT_TIMESTAMP WHERE user_id = $4`,
+      [JSON.stringify(completed), streak, lastActive, Number(userId)]
+    );
 
     return NextResponse.json({
       completedProblems: completed,

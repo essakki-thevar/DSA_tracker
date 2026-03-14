@@ -10,10 +10,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as { id: number; username: string; email: string; password: string } | undefined;
-    if (!user) {
+    const userRes = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (userRes.rows.length === 0) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
+    const user = userRes.rows[0];
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {

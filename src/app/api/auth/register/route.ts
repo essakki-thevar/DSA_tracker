@@ -10,17 +10,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'All fields required' }, { status: 400 });
     }
 
-    const existing = db.prepare('SELECT id FROM users WHERE email = ? OR username = ?').get(email, username);
-    if (existing) {
+    const existingRes = await db.query('SELECT id FROM users WHERE email = $1 OR username = $2', [email, username]);
+    if (existingRes.rows.length > 0) {
       return NextResponse.json({ error: 'Username or email already taken' }, { status: 409 });
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    const result = db.prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)').run(username, email, hashed);
-    const userId = result.lastInsertRowid as number;
+    const insertRes = await db.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
+      [username, email, hashed]
+    );
+    const userId = insertRes.rows[0].id;
 
     // Create initial progress row
-    db.prepare('INSERT INTO user_progress (user_id) VALUES (?)').run(userId);
+    await db.query('INSERT INTO user_progress (user_id) VALUES ($1)', [userId]);
 
     // Set session cookie
     const cookieStore = await cookies();

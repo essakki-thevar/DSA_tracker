@@ -10,10 +10,8 @@ export async function GET() {
     const userId = cookieStore.get('dsa_user_id')?.value;
     if (!userId) return NextResponse.json({ daily: [], totalDays: 0, dayNumber: 0 });
 
-    const row = db.prepare('SELECT plan_duration_months, start_date FROM user_progress WHERE user_id = ?').get(Number(userId)) as {
-      plan_duration_months: number | null;
-      start_date: string | null;
-    };
+    const rowRes = await db.query('SELECT plan_duration_months, start_date FROM user_progress WHERE user_id = $1', [Number(userId)]);
+    const row = rowRes.rows[0];
 
     if (!row?.start_date || !row?.plan_duration_months) {
       return NextResponse.json({ daily: [], totalDays: 0, dayNumber: 0 });
